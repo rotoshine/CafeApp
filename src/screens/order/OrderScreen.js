@@ -29,33 +29,43 @@ import CafeMenuImage from './CafeMenuImage';
 import NumberFormat from './NumberFormat';
 
 import { cafeMenus } from '../../../data/data';
+import BeverageType from './BeverageType';
+
+const MAX_SHOT_COUNT = 4;
 
 const OptionView = styled.View`
   display: flex;
   flex-direction: row;
 `;
 
-const OptionButton = styled(Button)`
+const OptionButton = styled(Button) `
   flex: 1;
 `;
 export default class OrderScreen extends Component {
-  constructor (props) {
+  constructor(props) {
     super(props);
 
     this.state = {
       modalVisible: false
     };
   }
-  
-  componentWillReceiveProps (nextProps) {
-    Toast.show({ title: 'prop 받음', duration: 1000, position: 'bottom'});    
-  }
 
   setModalVisible(visible) {
-    this.setState({modalVisible: visible});
+    this.setState({ modalVisible: visible });
   }
 
-  changeShot(i, shot) {
+  changeOrderValue(orderIndex, paramName, value) {
+
+    const { navigation } = this.props;
+    const { selectedMenuItems } = navigation.state.params;
+
+    const nextSelectedMenuItems = [...selectedMenuItems];
+
+    if (nextSelectedMenuItems[orderIndex] && nextSelectedMenuItems[orderIndex][paramName]) {
+      nextSelectedMenuItems[orderIndex][paramName] = value;
+
+      navigation.setParams(nextSelectedMenuItems);
+    }
   }
 
   handleOrder = () => {
@@ -69,7 +79,7 @@ export default class OrderScreen extends Component {
         NavigationActions.reset({
           index: 0,
           actions: [
-            NavigationActions.navigate({ routeName: 'CafeMenuList'})
+            NavigationActions.navigate({ routeName: 'CafeMenuList' })
           ]
         })
       );
@@ -78,61 +88,104 @@ export default class OrderScreen extends Component {
         text: '주문이 완료되었습니다.',
         buttonText: '닫기',
         duration: 1000 * 3,
-        type: 'success'        
+        type: 'success'
       });
-      
+
       this.setState({
         isFetching: false
       });
     }, 1000)
   }
 
-  render () {
+  renderShotCountOptions(orderIndex, menuItem) {
+    const shotCountOptions = [];
+
+    for (let shotCountIndex = 0; shotCountIndex < MAX_SHOT_COUNT; shotCountIndex++) {
+      const shotCount = (shotCountIndex + 1);
+      const selected = (menuItem.shotCount === shotCount);
+      shotCountOptions.push(
+        <OptionButton key={shotCountIndex}
+          info={selected}
+          light={!selected}
+          onPress={() => this.changeOrderValue(orderIndex, 'shotCount', shotCount)}>
+          <Text>{shotCount}샷</Text>
+        </OptionButton>
+      );
+    }
+
+    return shotCountOptions;
+  }
+
+  render() {
     const { isFetching } = this.state;
     const { navigation } = this.props;
-    const { selectedMenuIds } = this.props.navigation.state.params;
+    const { selectedMenuItems } = this.props.navigation.state.params;
 
-    const selectedMenus = selectedMenuIds.map((menuId) => cafeMenus.find((cafeMenu) => cafeMenu.id === menuId));
-    const totalPrice = selectedMenus.reduce((totalPrice, menu) => totalPrice + menu.price, 0);
+    const cafeMenusMap = {};
+    selectedMenuItems.forEach((menuItem) => {
+      cafeMenusMap[menuItem.menuId] = cafeMenus.find((cafeMenu) => cafeMenu.id === menuItem.menuId);
+    });
+
+    const totalPrice = selectedMenuItems.reduce((totalPrice, menuItem) => totalPrice + cafeMenusMap[menuItem.menuId].price, 0);
     return (
       <ScreenComponent title="Order" navigation={navigation} hasBackButton>
-        <Spinner visible={isFetching} />        
-        <Content>
-          {selectedMenus.map((menu, i) => {
+        <Spinner visible={isFetching} />
+        <Content padder>
+          {selectedMenuItems.map((menuItem, orderIndex) => {
+            const menu = cafeMenusMap[menuItem.menuId];
+
+            if (!menu) {
+              return null;
+            }
+
+            const isHot = menuItem.beverageType === BeverageType.HOT;
             return (
-              <Card key={i}>
-                <CardItem style={{flex: 1, justifyContent: 'center'}}>
-                  <H1>{menu.name}</H1>
+              <Card key={orderIndex}>
+                <CardItem style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                  <Body>
+                    <H1 style={{flex: 1}}>{menu.name}</H1>
+                  </Body>                  
+                  <Right style={{flex: 1}}>
+                    <Button danger>
+                      <Icon name="close" />
+                    </Button>                  
+                  </Right>
                 </CardItem>
                 <CardItem cardBody>
                   <Body>
                     <CafeMenuImage source={{ uri: menu.image }} />
                   </Body>
-                </CardItem>                
+                </CardItem>
                 <CardItem>
-                  <Right style={{flex: 1}}>            
-                    <NumberFormat style={{fontSize: 20}} number={menu.price} />
+                  <Right style={{ flex: 1 }}>
+                    <NumberFormat style={{ fontSize: 20 }} number={menu.price} />
                   </Right>
                 </CardItem>
                 <CardItem>
                   <OptionView>
-                    <OptionButton active danger><Text>Hot</Text></OptionButton>
-                    <OptionButton><Text>Ice</Text></OptionButton>
-                  </OptionView>                  
-                </CardItem>
-                <CardItem>
-                  <OptionView>
-                    <OptionButton light onPress={() => this.changeShot(i, 1)}><Text>1샷</Text></OptionButton>
-                    <OptionButton active info onPress={() => this.changeShot(i, 2)}><Text>2샷</Text></OptionButton>
-                    <OptionButton info onPress={() => this.changeShot(i, 3)}><Text>3샷</Text></OptionButton>
-                    <OptionButton info onPress={() => this.changeShot(i, 4)}><Text>4샷</Text></OptionButton>
+                    <OptionButton danger={isHot} light={!isHot} onPress={() => {
+                      this.changeOrderValue(orderIndex, 'beverageType', BeverageType.HOT);
+                    }}>
+                      <Text>Hot</Text>
+                    </OptionButton>
+                    <OptionButton primary={!isHot} light={isHot} onPress={() => {
+                      this.changeOrderValue(orderIndex, 'beverageType', BeverageType.ICE);
+                    }}>
+                      <Text>Ice</Text>
+                    </OptionButton>
                   </OptionView>
                 </CardItem>
                 <CardItem>
-                  <Form style={{flex: 1}}>
-                    <Item floatingLabel>
-                      <Label>주문시 요청사항</Label>
-                      <Input />
+                  <OptionView>
+                    {this.renderShotCountOptions(orderIndex, menuItem)}
+                  </OptionView>
+                </CardItem>
+                <CardItem>
+                  <Form style={{ flex: 1 }}>
+                    <Item>
+                      <Label>요청사항</Label>
+                      <Input value={menu.orderRequest}
+                        onChangeText={(text) => this.changeOrderValue(orderIndex, 'orderRequest', text)} />
                     </Item>
                   </Form>
                 </CardItem>
@@ -141,10 +194,13 @@ export default class OrderScreen extends Component {
           })}
           <Card>
             <CardItem>
-              <NumberFormat style={{fontSize: 35}} number={totalPrice}/>
+              <Right style={{ flex: 1 }}>
+                <Text>총 금액</Text>
+                <NumberFormat style={{ fontSize: 35 }} number={totalPrice} />
+              </Right>
             </CardItem>
           </Card>
-          <Button iconLeft block onPress={this.handleOrder}>
+          <Button style={{marginBottom: 15}} iconLeft block onPress={this.handleOrder}>
             <Icon name="cafe" />
             <Text>주문하기</Text>
           </Button>

@@ -26,10 +26,11 @@ import styled from 'styled-components/native';
 import ScreenComponent from '../ScreenComponent';
 
 import { categories, cafeMenus } from '../../../data/data';
-
+import BeverageType from './BeverageType';
 import CafeMenuImage from './CafeMenuImage';
 import NumberFormat from './NumberFormat';
 
+const DEFAULT_SHOT_COUNT = 2;
 const CafeMenuWrapperView = styled.View`
   flex: 1;
   flex-direction: row;
@@ -133,7 +134,14 @@ export default class CafeMenuListScreen extends Component {
       });
     } else {
       navigation.navigate('Order', {
-        selectedMenus: [...selectedMenuIds]
+        selectedMenuItems: selectedMenuIds.map((menuId) => {
+          return {
+            menuId,
+            beverageType: BeverageType.HOT,
+            shotCount: DEFAULT_SHOT_COUNT,
+            orderRequest: ''
+          }
+        })
       });
 
       this.setState({
