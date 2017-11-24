@@ -28,6 +28,7 @@ import ScreenComponent from '../ScreenComponent';
 import { categories, cafeMenus } from '../../../data/data';
 
 import CafeMenuImage from './CafeMenuImage';
+import NumberFormat from './NumberFormat';
 
 const CafeMenuWrapperView = styled.View`
   flex: 1;
@@ -95,7 +96,7 @@ export default class CafeMenuListScreen extends Component {
             </CardItem>          
             <CardItem>
               <Right style={{flex: 1}}>            
-                <Text>{menu.price}원</Text>            
+                <NumberFormat number={menu.price} />  
               </Right>
             </CardItem>
             <CardItem footer>            
@@ -104,7 +105,11 @@ export default class CafeMenuListScreen extends Component {
                   <Button style={{marginRight: 5}} onPress={() => this.selectMenu(menu.id)}>
                     <Text>담기</Text>
                   </Button>              
-                  <Button onPress={() => navigation.navigate('Order', { selectedMenuIds: [menu.id]})}>
+                  <Button onPress={() => {
+                    this.setState({
+                      selectedMenuIds: [menu.id]
+                    }, this.handleMoveOrderScreen);                    
+                  }}>
                     <Text>바로주문</Text>
                   </Button>
                 </View>            
@@ -128,7 +133,7 @@ export default class CafeMenuListScreen extends Component {
       });
     } else {
       navigation.navigate('Order', {
-        selectedMenuIds: [...selectedMenuIds]
+        selectedMenus: [...selectedMenuIds]
       });
 
       this.setState({
@@ -159,9 +164,8 @@ export default class CafeMenuListScreen extends Component {
         headerRight={headerRight}
       >
         
-        <Tabs style={{paddingBottom: 40}}
-              renderTabBar={() => <ScrollableTab />}
-              onChangeTab={({ i }) => {
+        <Tabs renderTabBar={() => <ScrollableTab />}
+              onChangeTab={({i}) => {
                 this.setState({ selectedCategory: categories[i].id });
               }}>
           {categories.map((category, i) => {
