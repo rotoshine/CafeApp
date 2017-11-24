@@ -85,7 +85,7 @@ export default class OrderScreen extends Component {
           {selectedMenus.map((menu, i) => {
             return (
               <Card key={i}>
-                <CardItem style={{flex: 1, justifyContent: 'center', textAlign: 'center'}}>
+                <CardItem style={{flex: 1, justifyContent: 'center'}}>
                   <H1>{menu.name}</H1>
                 </CardItem>
                 <CardItem cardBody>
@@ -95,7 +95,7 @@ export default class OrderScreen extends Component {
                 </CardItem>                
                 <CardItem>
                   <Right style={{flex: 1}}>            
-                    <H2>{menu.price}원</H2>            
+                    <H2>{`${menu.price}원`}</H2>            
                   </Right>
                 </CardItem>
                 <CardItem>
