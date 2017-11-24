@@ -159,7 +159,8 @@ export default class CafeMenuListScreen extends Component {
         headerRight={headerRight}
       >
         
-        <Tabs renderTabBar={() => <ScrollableTab />}
+        <Tabs style={{paddingBottom: 40}}
+              renderTabBar={() => <ScrollableTab />}
               onChangeTab={({ i }) => {
                 this.setState({ selectedCategory: categories[i].id });
               }}>
@@ -176,7 +177,7 @@ export default class CafeMenuListScreen extends Component {
               </Tab>
             )
           })}
-        </Tabs>        
+        </Tabs>
       </ScreenComponent>
     );
   }

@@ -109,6 +109,11 @@ export default class OrderScreen extends Component {
               </Card>
             )
           })}
+          <Card>
+            <CardItem>
+              <H1>{`총 가격: ${selectedMenus.reduce((totalPrice, menu) => totalPrice + menu.price, 0)}원`}</H1>
+            </CardItem>
+          </Card>
           <Button iconLeft block onPress={this.handleOrder}>
             <Icon name="cafe" />
             <Text>주문하기</Text>
