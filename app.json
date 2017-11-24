@@ -1,0 +1,16 @@
+{
+  "expo": {
+    "sdkVersion": "22.0.0",
+    "slug": "smartstudy-cafe",
+    "privacy": "unlisted",
+    "orientation": "portrait"
+  },
+  "ios": {
+    "supportsTablet": true
+  },
+  
+  "androidStatusBar": {
+    "barStyle": "light-content",
+    "backgroundColor": "#334393"
+  }    
+}
