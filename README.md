@@ -15,7 +15,7 @@
     - 설치 후 QR코드 스캔으로 console에 떠있는 QR코드 스캔 
 
 # 구글 인증 연동하기
-- https://docs.expo.io/versions/latest/sdk/google.html 를 참고하여 `android client id`와 `ios client id`를 생성
+- https://docs.expo.io/versions/latest/sdk/google.html 를 참고하여 구글 프로젝트 생성 뒤 `android client id`와 `ios client id`를 생성
 - 프로젝트 루트에 .env를 만들고 아래와 같은 파일을 생성
   ```
   ANDROID_CLIENT_ID=YOUR_ANDROID_CLIENT_ID
