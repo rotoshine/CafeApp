@@ -13,7 +13,7 @@ import {
   Right
 } from 'native-base';
 
-import MenuTrigger from '../sidebar/MenuTrigger';
+import MenuTrigger from './sidebar/MenuTrigger';
 
 export default class ScreenComponent extends Component {
   render() {

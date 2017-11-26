@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Expo from 'expo';
 import { Root } from 'native-base';
 
-import MainNavigator from './src/MainNavigator';
+import AppMainNavigator from './src/navigators';
 
 export default class App extends Component {
   constructor (props) {
@@ -29,7 +29,7 @@ export default class App extends Component {
 
     return (
       <Root>
-        <MainNavigator />
+        <AppMainNavigator />
       </Root>
     );
   }

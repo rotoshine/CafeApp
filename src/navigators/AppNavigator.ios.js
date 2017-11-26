@@ -3,13 +3,11 @@ import { Constants } from 'expo';
 import { Icon } from 'native-base';
 import { TabNavigator } from 'react-navigation';
 
-import HomeScreen from './screens/home/HomeScreen';
-import MenuAndOrderNavigator from './screens/order/MenuAndOrderNavigator';
-import ProfileScreen from './screens/profile/ProfileScreen';
+import HomeScreen from '../screens/home/HomeScreen';
+import MenuAndOrderNavigator from '../screens/order/MenuAndOrderNavigator';
+import ProfileScreen from '../screens/profile/ProfileScreen';
 
-import SideBar from './sidebar/SideBar';
-
-const MainNavigator = TabNavigator(
+const AppNavigator = TabNavigator(
   {
     Home: {
       screen: HomeScreen,
@@ -47,4 +45,4 @@ const MainNavigator = TabNavigator(
   }
 );
 
-export default MainNavigator;
+export default AppNavigator;

@@ -43,7 +43,7 @@ export default class SideBar extends Component {
     return (
       <Container style={{paddingTop: StatusBar.currentHeight}}>
         <Content>
-          <CafeImage source={require('../images/pinkfong-logo.png')} />
+          <CafeImage source={require('../../images/pinkfong-logo.png')} />
           <List dataArray={routes}
             renderRow={(menu) => {
               return (

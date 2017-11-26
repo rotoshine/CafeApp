@@ -1,14 +1,15 @@
 import React, { Component } from 'react';
 import { StatusBar } from 'react-native';
 import { Constants } from 'expo';
-import { DrawerNavigator } from 'react-navigation';
+import { DrawerNavigator, StackNavigator } from 'react-navigation';
 
-import HomeScreen from './screens/home/HomeScreen';
-import MenuAndOrderNavigator from './screens/order/MenuAndOrderNavigator';
-import ProfileScreen from './screens/profile/ProfileScreen';
-import SideBar from './sidebar/SideBar';
+import HomeScreen from '../screens/home/HomeScreen';
+import MenuAndOrderNavigator from '../screens/order/MenuAndOrderNavigator';
+import ProfileScreen from '../screens/profile/ProfileScreen';
+import SideBar from '../screens/sidebar/SideBar';
 
-const MainNavigator = DrawerNavigator(
+
+const AppNavigator = DrawerNavigator(
   {
     Home: {
       screen: HomeScreen
@@ -31,4 +32,4 @@ const MainNavigator = DrawerNavigator(
   }
 );
 
-export default MainNavigator;
+export default AppNavigator;

@@ -18,7 +18,6 @@ import {
 import styled from 'styled-components/native';
 
 import ScreenComponent from '../ScreenComponent'
-import MenuTrigger from '../../sidebar/MenuTrigger';
 
 const MainView = styled.View`  
   width: 100%;
@@ -38,13 +37,13 @@ export default class HomeScreen extends Component {
     const { navigation } = this.props;
 
     return (
-      <ScreenComponent title="SmartStudy Cafe" navigation={navigation}>        
-      <MainView>
-        <CafeMainImage source={require('../../images/cafe.jpg')}>
-          <Content>
-            
-          </Content>
-        </CafeMainImage>
+      <ScreenComponent title="SmartStudy Cafe" navigation={navigation}>
+        <MainView>
+          <CafeMainImage source={require('../../images/cafe.jpg')}>
+            <Content>
+
+            </Content>
+          </CafeMainImage>
         </MainView>
       </ScreenComponent>
     );
